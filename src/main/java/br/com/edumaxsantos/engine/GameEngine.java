@@ -1,4 +1,4 @@
-package engine;
+package br.com.edumaxsantos.engine;
 
 public class GameEngine implements Runnable {
 
@@ -28,6 +28,8 @@ public class GameEngine implements Runnable {
             gameLoop();
         } catch(Exception e) {
             e.printStackTrace();
+        } finally {
+            cleanup();
         }
     }
 
@@ -61,6 +63,10 @@ public class GameEngine implements Runnable {
                 sync();
             }
         }
+    }
+
+    protected void cleanup() {
+        gameLogic.cleanup();
     }
 
     private void sync() {

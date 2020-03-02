@@ -1,4 +1,4 @@
-package engine;
+package br.com.edumaxsantos.engine;
 
 import lombok.Getter;
 

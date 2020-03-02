@@ -1,8 +1,7 @@
-package game;
+package br.com.edumaxsantos.game;
 
-import engine.IGameLogic;
-import engine.Window;
-import lombok.RequiredArgsConstructor;
+import br.com.edumaxsantos.engine.IGameLogic;
+import br.com.edumaxsantos.engine.Window;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
@@ -45,12 +44,19 @@ public class DummyGame implements IGameLogic {
 
     @Override
     public void render(Window window) {
-        if (window.isResized()) {
+        /*if (window.isResized()) {
             glViewport(0, 0, window.getWidth(), window.getHeight());
             window.setResized(false);
         }
         window.setClearColor(color, color, color, 0.0f);
-        renderer.clear();
+        renderer.clear();*/
+        window.setClearColor(color, color, color, 0.0f);
+        renderer.render(window);
+    }
+
+    @Override
+    public void cleanup() {
+        renderer.cleanup();
     }
 
 

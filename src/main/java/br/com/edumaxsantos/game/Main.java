@@ -1,8 +1,8 @@
-package game;
+package br.com.edumaxsantos.game;
 
 
-import engine.GameEngine;
-import engine.IGameLogic;
+import br.com.edumaxsantos.engine.GameEngine;
+import br.com.edumaxsantos.engine.IGameLogic;
 
 public class Main {
 
