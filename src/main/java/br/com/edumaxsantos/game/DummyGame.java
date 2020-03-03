@@ -2,6 +2,7 @@ package br.com.edumaxsantos.game;
 
 import br.com.edumaxsantos.engine.IGameLogic;
 import br.com.edumaxsantos.engine.Window;
+import br.com.edumaxsantos.engine.graph.Mesh;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
@@ -16,9 +17,28 @@ public class DummyGame implements IGameLogic {
 
     private final Renderer renderer = new Renderer();
 
+    private Mesh mesh;
+
     @Override
     public void init() throws Exception {
         renderer.init();
+        float[] positions = new float[] {
+                -0.5f,  0.5f, 0.0f,
+                -0.5f, -0.5f, 0.0f,
+                 0.5f, -0.5f, 0.0f,
+                 0.5f,  0.5f, 0.0f,
+        };
+        float[] colors = new float[] {
+                0.5f, 0.0f, 0.0f,
+                0.0f, 0.5f, 0.0f,
+                0.0f, 0.0f, 0.5f,
+                0.0f, 0.5f, 0.5f
+        };
+        int[] indices = new int[] {
+                0, 1, 3, 3, 1, 2
+        };
+
+        mesh = new Mesh(positions, colors, indices);
     }
 
     @Override
@@ -51,7 +71,7 @@ public class DummyGame implements IGameLogic {
         window.setClearColor(color, color, color, 0.0f);
         renderer.clear();*/
         window.setClearColor(color, color, color, 0.0f);
-        renderer.render(window);
+        renderer.render(window, mesh);
     }
 
     @Override
