@@ -130,6 +130,14 @@
             <version>1.18.12</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.joml/joml -->
+        <dependency>
+            <groupId>org.joml</groupId>
+            <artifactId>joml</artifactId>
+            <version>1.9.22</version>
+        </dependency>
+
     </dependencies>
 
 
