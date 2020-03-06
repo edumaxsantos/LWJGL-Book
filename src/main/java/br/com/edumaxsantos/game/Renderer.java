@@ -3,6 +3,7 @@ package br.com.edumaxsantos.game;
 import br.com.edumaxsantos.engine.GameItem;
 import br.com.edumaxsantos.engine.Utils;
 import br.com.edumaxsantos.engine.Window;
+import br.com.edumaxsantos.engine.graph.Camera;
 import br.com.edumaxsantos.engine.graph.ShaderProgram;
 import br.com.edumaxsantos.engine.graph.Transformation;
 import org.joml.Matrix4f;
@@ -37,7 +38,7 @@ public class Renderer {
 
         // Create uniforms for world and projection matrices
         shaderProgram.createUniform("projectionMatrix");
-        shaderProgram.createUniform("worldMatrix");
+        shaderProgram.createUniform("modelViewMatrix");
         shaderProgram.createUniform("texture_sampler");
     }
 
@@ -45,7 +46,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Window window, GameItem[] gameItems) {
+    public void render(Window window, Camera camera, GameItem[] gameItems) {
         clear();
 
         if (window.isResized()) {
@@ -59,15 +60,15 @@ public class Renderer {
         Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
         shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
+        // Update view Matrix
+        Matrix4f viewMatrix = transformation.getViewMatrix(camera);
+
         shaderProgram.setUniform("texture_sampler", 0);
         // Render each gameItem
         for(GameItem gameItem: gameItems) {
             // Set world matrix for this item
-            Matrix4f worldMatrix = transformation.getWorldMatrix(
-                    gameItem.getPosition(),
-                    gameItem.getRotation(),
-                    gameItem.getScale());
-            shaderProgram.setUniform("worldMatrix", worldMatrix);
+            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix);
+            shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             // Render the mesh for this game item
             gameItem.getMesh().render();
         }

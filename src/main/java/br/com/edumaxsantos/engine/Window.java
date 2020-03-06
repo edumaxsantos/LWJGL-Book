@@ -26,6 +26,7 @@ public class Window {
     @Getter
     private int height;
 
+    @Getter
     private long windowHandle;
 
     @Setter
