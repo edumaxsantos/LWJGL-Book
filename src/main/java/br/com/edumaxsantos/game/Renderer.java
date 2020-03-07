@@ -4,6 +4,7 @@ import br.com.edumaxsantos.engine.GameItem;
 import br.com.edumaxsantos.engine.Utils;
 import br.com.edumaxsantos.engine.Window;
 import br.com.edumaxsantos.engine.graph.Camera;
+import br.com.edumaxsantos.engine.graph.Mesh;
 import br.com.edumaxsantos.engine.graph.ShaderProgram;
 import br.com.edumaxsantos.engine.graph.Transformation;
 import org.joml.Matrix4f;
@@ -40,6 +41,9 @@ public class Renderer {
         shaderProgram.createUniform("projectionMatrix");
         shaderProgram.createUniform("modelViewMatrix");
         shaderProgram.createUniform("texture_sampler");
+        // Create uniform for default color and flag that controls it
+        shaderProgram.createUniform("color");
+        shaderProgram.createUniform("useColor");
     }
 
     public void clear() {
@@ -66,10 +70,13 @@ public class Renderer {
         shaderProgram.setUniform("texture_sampler", 0);
         // Render each gameItem
         for(GameItem gameItem: gameItems) {
+            Mesh mesh = gameItem.getMesh();
             // Set world matrix for this item
             Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             // Render the mesh for this game item
+            shaderProgram.setUniform("color", mesh.getColor());
+            shaderProgram.setUniform("useColor", mesh.isTextured() ? 0 : 1);
             gameItem.getMesh().render();
         }
 
