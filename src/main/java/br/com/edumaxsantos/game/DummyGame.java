@@ -4,10 +4,7 @@ import br.com.edumaxsantos.engine.GameItem;
 import br.com.edumaxsantos.engine.IGameLogic;
 import br.com.edumaxsantos.engine.MouseInput;
 import br.com.edumaxsantos.engine.Window;
-import br.com.edumaxsantos.engine.graph.Camera;
-import br.com.edumaxsantos.engine.graph.Mesh;
-import br.com.edumaxsantos.engine.graph.OBJLoader;
-import br.com.edumaxsantos.engine.graph.Texture;
+import br.com.edumaxsantos.engine.graph.*;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -26,20 +23,36 @@ public class DummyGame implements IGameLogic {
 
     private GameItem[] gameItems;
 
+    private Vector3f ambientLight;
+
+    private PointLight pointLight;
+
     private static final float CAMERA_POS_STEP = 0.05f;
 
     @Override
     public void init(Window window) throws Exception {
         renderer.init(window);
 
+        float reflectance = 1f;
+
         Mesh mesh = OBJLoader.loadMesh("/models/cube.obj");
         Texture texture = new Texture("src/textures/grassblock.png");
-        mesh.setTexture(texture);
-        Mesh bunny = OBJLoader.loadMesh("/models/bunny.obj");
-        GameItem gameItem = new GameItem(bunny);
+        //mesh.setTexture(texture);
+        //Mesh bunny = OBJLoader.loadMesh("/models/bunny.obj");
+        Material material = new Material(texture, reflectance);
+        mesh.setMaterial(material);
+        GameItem gameItem = new GameItem(mesh);
         gameItem.setScale(1.5f);
         gameItem.setPosition(0, 0, -2);
         gameItems = new GameItem[] { gameItem };
+
+        ambientLight = new Vector3f(0.3f, 0.3f, 0.3f);
+        Vector3f lightColor = new Vector3f(1, 1, 1);
+        Vector3f lightPosition = new Vector3f(0, 0, 1);
+        float lightIntensity = 1.0f;
+        pointLight = new PointLight(lightColor, lightPosition, lightIntensity);
+        PointLight.Attenuation att = new PointLight.Attenuation(0.0f, 0.0f, 1.0f);
+        pointLight.setAttenuation(att);
     }
 
     @Override
@@ -78,7 +91,7 @@ public class DummyGame implements IGameLogic {
 
     @Override
     public void render(Window window) {
-        renderer.render(window, camera, gameItems);
+        renderer.render(window, camera, gameItems, ambientLight, pointLight);
     }
 
     @Override

@@ -12,12 +12,10 @@ import static org.lwjgl.opengl.GL30.*;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;
 
 public class Mesh {
 
-    private static final Vector3f DEFAULT_COLOR = new Vector3f(1f, 1f, 1f);
 
     @Getter
     private final int vaoId;
@@ -29,11 +27,7 @@ public class Mesh {
 
     @Getter
     @Setter
-    private Texture texture;
-
-    @Getter
-    @Setter
-    private Vector3f color;
+    private Material material;
 
     public Mesh(float[] positions, float[] textCoords, float[] normals, int[] indices) {
         FloatBuffer posBuffer = null;
@@ -42,7 +36,6 @@ public class Mesh {
         IntBuffer indicesBuffer = null;
 
         try {
-            color = Mesh.DEFAULT_COLOR;
             vertexCount = indices.length;
             vboIdList = new ArrayList<>();
 
@@ -106,13 +99,10 @@ public class Mesh {
         }
     }
 
-    public boolean isTextured() {
-        return this.texture != null;
-    }
-
     public void render() {
-        if (isTextured()) {
-            // Activate first textture bank
+        Texture texture = material.getTexture();
+        if (material.isTextured()) {
+            // Activate first texture bank
             glActiveTexture(GL_TEXTURE0);
             // Bind the texture
             glBindTexture(GL_TEXTURE_2D, texture.getId());
@@ -146,8 +136,8 @@ public class Mesh {
         }
 
         // Delete the texture
-        if(isTextured()) {
-            texture.cleanup();
+        if(material.isTextured()) {
+            material.getTexture().cleanup();
         }
 
         // Delete the VAO
