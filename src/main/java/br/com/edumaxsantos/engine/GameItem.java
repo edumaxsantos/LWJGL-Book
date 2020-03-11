@@ -1,16 +1,17 @@
 package br.com.edumaxsantos.engine;
 
 import br.com.edumaxsantos.engine.graph.Mesh;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.joml.Vector3f;
 
 @RequiredArgsConstructor
+@NoArgsConstructor
 public class GameItem {
 
     @Getter
-    private final Mesh mesh;
+    @NonNull
+    @Setter
+    private Mesh mesh;
 
     @Getter
     private final Vector3f position = new Vector3f();
